@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ConfigReader
+namespace ConfigManager
 {
     public class Configuration
     {

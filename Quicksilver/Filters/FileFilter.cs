@@ -2,6 +2,8 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 
 namespace Quicksilver.Filters
 {
@@ -17,22 +19,23 @@ namespace Quicksilver.Filters
 
         public string[] Filters { get; set; }
 
-        public void Filter(RenamedEventArgs arg, Action restart)
+        public void Filter(RenamedEventArgs arg, Subject<string> subject)
         {
             if (Filters.Any(t => arg.Name.Contains("."+t)))
             {
                 _logger.Info($"File {arg.OldName} was renamed to: {arg.Name}");
-                restart();
+                subject.OnNext(arg.Name);
             }
         }
 
-        public void Filter(FileSystemEventArgs arg, Action restart)
+        public void Filter(FileSystemEventArgs arg, Subject<string> subject)
         {
             if (Filters.Any(t => arg.Name.Contains("." + t)))
             {
                 _logger.Info($"File {arg.Name} was {arg.ChangeType.ToString()} ");
-                restart();
+                subject.OnNext(arg.Name);
             }
         }
+
     }
 }

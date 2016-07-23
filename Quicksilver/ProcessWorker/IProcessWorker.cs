@@ -1,5 +1,5 @@
 ﻿
-using ConfigReader;
+using ConfigManager;
 
 namespace Quicksilver.ProcessWorker
 {

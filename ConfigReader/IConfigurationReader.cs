@@ -1,4 +1,4 @@
-﻿namespace ConfigReader
+﻿namespace ConfigManager
 {
     public interface IConfigurationReader
     {

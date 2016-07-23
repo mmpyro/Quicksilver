@@ -2,7 +2,7 @@
 using Quicksilver;
 using NSubstitute;
 using Ploeh.AutoFixture;
-using ConfigReader;
+using ConfigManager;
 using FileWatcher;
 using FileNotifier;
 using System.IO;

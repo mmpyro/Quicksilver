@@ -1,4 +1,4 @@
-﻿using ConfigReader;
+﻿using ConfigManager;
 using NUnit.Framework;
 using Shouldly;
 using NSubstitute;

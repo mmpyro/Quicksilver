@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileNotifier", "..\..\..\Ol
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileWatcher", "..\..\..\OldProjects\Codes\FileNotifier\FileWatcher\FileWatcher.csproj", "{15B3E0D2-6217-493A-A690-158C497F5318}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigReader", "ConfigReader\ConfigReader.csproj", "{0021012E-70E3-42C3-A44F-5E61123D0275}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigManager", "ConfigReader\ConfigManager.csproj", "{0021012E-70E3-42C3-A44F-5E61123D0275}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "External", "External", "{AEA9E293-F4ED-4948-B90A-9DD564452D03}"
 EndProject

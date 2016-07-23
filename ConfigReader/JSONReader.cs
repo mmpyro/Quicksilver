@@ -2,13 +2,13 @@
 using Newtonsoft.Json;
 using System.IO;
 
-namespace ConfigReader
+namespace ConfigManager
 {
     public class JSONReader : IConfigurationReader
     {
         public Configuration LoadConfiguration()
         {
-            string configurationFilePath = Path.Combine(Directory.GetCurrentDirectory(), "quicksilver.js");
+            string configurationFilePath = Path.Combine(Directory.GetCurrentDirectory(), "quicksilver.json");
             if (File.Exists(configurationFilePath))
             {
                 return JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configurationFilePath));
@@ -21,7 +21,7 @@ namespace ConfigReader
 
         public Configuration LoadConfiguration(string directoryFilePath)
         {
-            string configurationFilePath = Path.Combine(directoryFilePath, "quicksilver.js");
+            string configurationFilePath = Path.Combine(directoryFilePath, "quicksilver.json");
             if (File.Exists(configurationFilePath))
             {
                 return JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(configurationFilePath));

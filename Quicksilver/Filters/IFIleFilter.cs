@@ -1,12 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
+using System.Reactive.Subjects;
 
 namespace Quicksilver.Filters
 {
     public interface IFileFilter
     {
         string[] Filters { get; set; }
-        void Filter(FileSystemEventArgs arg, Action restart);
-        void Filter(RenamedEventArgs arg, Action restart);
+        void Filter(FileSystemEventArgs arg, Subject<string> subject);
+        void Filter(RenamedEventArgs arg, Subject<string> subject);
     }
 }

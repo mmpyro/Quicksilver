@@ -68,9 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="quicksilver.js">
+    <None Include="quicksilver.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\OldProjects\Codes\FileNotifier\FileNotifier\FileNotifier.csproj">
@@ -81,9 +81,9 @@
       <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
       <Name>FileWatcher</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ConfigReader\ConfigReader.csproj">
+    <ProjectReference Include="..\ConfigReader\ConfigManager.csproj">
       <Project>{0021012e-70e3-42c3-a44f-5e61123d0275}</Project>
-      <Name>ConfigReader</Name>
+      <Name>ConfigManager</Name>
     </ProjectReference>
     <ProjectReference Include="..\Quicksilver\Quicksilver.csproj">
       <Project>{fb126355-3325-441e-9612-a5552d6e9ab7}</Project>

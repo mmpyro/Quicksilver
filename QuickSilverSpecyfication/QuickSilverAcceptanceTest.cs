@@ -1,4 +1,4 @@
-﻿using ConfigReader;
+﻿using ConfigManager;
 using FileWatcher;
 using NUnit.Framework;
 using Quicksilver;
@@ -23,7 +23,7 @@ namespace QuickSilverSpecyfication
             Assembly ass = Assembly.GetExecutingAssembly();
             _configDirectoryPath = Path.GetDirectoryName(ass.Location);
             FileObserver.CreateFunction = (dto, notifier) => new FileWatchDog(dto, notifier);
-            _configuartion = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(Path.Combine(_configDirectoryPath, "quicksilver.js")));
+            _configuartion = JsonConvert.DeserializeObject<Configuration>(File.ReadAllText(Path.Combine(_configDirectoryPath, "quicksilver.json")));
         }
 
         [SetUp]

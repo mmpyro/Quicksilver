@@ -1,4 +1,4 @@
-﻿using ConfigReader;
+﻿using ConfigManager;
 using System.IO;
 using FileWatcher;
 using Quicksilver.Logger;

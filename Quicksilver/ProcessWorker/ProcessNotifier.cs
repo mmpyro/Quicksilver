@@ -1,15 +1,19 @@
 ﻿using System.IO;
-using ConfigReader;
+using ConfigManager;
 using System.Diagnostics;
 using Quicksilver.Filters;
 using Quicksilver.Logger;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Text;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using System;
 
 namespace Quicksilver.ProcessWorker
 {
-    public class ProcessNotifier : IProcessNotifier
+
+    public class ProcessNotifier : IProcessNotifier, IDisposable
     {
         private readonly IFileFilter _fileFilter;
         private readonly Configuration _configuration;
@@ -19,6 +23,8 @@ namespace Quicksilver.ProcessWorker
         private CancellationTokenSource _cancelationToken = new CancellationTokenSource();
         private CancellationToken _token;
         private bool _isRunning = false;
+        private readonly Subject<string> _subject;
+        private readonly IDisposable _subscryption;
 
         public ProcessNotifier(Configuration configuration, IFileFilter fileFilter, ILogger logger)
         {
@@ -26,6 +32,8 @@ namespace Quicksilver.ProcessWorker
             _configuration = configuration;
             _fileFilter.Filters = _configuration.Filters;
             _logger = logger;
+            _subject = new Subject<string>();
+            _subscryption = _subject.Throttle(TimeSpan.FromSeconds(1)).Subscribe(_ => Restart());
         }
 
         public void Kill()
@@ -33,7 +41,8 @@ namespace Quicksilver.ProcessWorker
             if (_isRunning == true)
             {
                 _logger.Warn($"Stop prcess with pid: {_process.Id}");
-                _process.Kill();
+                if(!_process.HasExited)
+                    _process.Kill();
                 _cancelationToken.Cancel();
                 _cancelationToken = new CancellationTokenSource();
                 _isRunning = false;
@@ -42,13 +51,13 @@ namespace Quicksilver.ProcessWorker
 
         public void OnCreated(FileSystemEventArgs arg)
         {
-            _fileFilter.Filter(arg, Restart);
+            _fileFilter.Filter(arg, _subject);
             
         }
 
         public void OnRename(RenamedEventArgs arg)
         {
-            _fileFilter.Filter(arg, Restart);
+            _fileFilter.Filter(arg, _subject);
         }
 
         public void Restart()
@@ -97,6 +106,11 @@ namespace Quicksilver.ProcessWorker
                 RedirectStandardOutput = true
             };
             return process;
+        }
+
+        public void Dispose()
+        {
+            _subscryption?.Dispose();
         }
     }
 }
