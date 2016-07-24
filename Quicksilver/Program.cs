@@ -33,15 +33,7 @@ namespace Quicksilver
                 {
                     quickSilver = new QuickSilver(configuration, processNotifier, new FileNotifierManager(processNotifier), logger);
                     quickSilver.Run();
-
-                    string line = null;
-                    Console.Write("> ");
-                    while (keepRunning && (line = Console.ReadLine()) != null)
-                    {
-                        if (line.Equals("exit", StringComparison.OrdinalIgnoreCase))
-                            break;
-                        Console.Write("> ");
-                    }
+                    CommandPrompt();
                 }
             }
             catch(Exception ex)
@@ -54,36 +46,53 @@ namespace Quicksilver
             }
         }
 
+        private static void CommandPrompt()
+        {
+            string line = null;
+            Console.Write("> ");
+            while (keepRunning && (line = Console.ReadLine()) != null)
+            {
+                if (line.Equals("exit", StringComparison.OrdinalIgnoreCase))
+                    break;
+                Console.Write("> ");
+            }
+        }
+
         private static Configuration LoadConfiguration(IConfigurationReader reader, string[] args)
         {
             if(args.Length == 1)
             {
-                switch (args[0].ToLower())
-                {
-                    case "help":
-                        Console.WriteLine("Quicksilver\n");
-                        Console.WriteLine("init - creates quicksilver.json file at current directory\n");
-                        Console.WriteLine("<dir_path> - directory path where quicksilver.json file is located\n");
-                        throw new InteruptedException("");
-                    case "init":
-                        var configuration = new Configuration();
-                        Console.WriteLine("Program to execute");
-                        configuration.Program = Console.ReadLine();
-                        configuration.DirectoryPath = currentDir;
-                        Console.WriteLine("Arguments");
-                        configuration.Arguments = Console.ReadLine();
-                        Console.WriteLine("Filters comma separated values");
-                        configuration.Filters = Console.ReadLine().Split(',');
-                        CreateConfigurationFile(configuration);
-                        throw new InteruptedException("");
-                    default:
-                        if (Directory.Exists(args[0]))
-                            return reader.LoadConfiguration(args[0]);
-                        else
-                            throw new ArgumentException($"Directory: {args[0]} does not exits.");
-                }
+                return ParseInputArguments(reader, args);
             }
             return reader.LoadConfiguration();
+        }
+
+        private static Configuration ParseInputArguments(IConfigurationReader reader, string[] args)
+        {
+            switch (args[0].ToLower())
+            {
+                case "help":
+                    Console.WriteLine("Quicksilver\n");
+                    Console.WriteLine("init - creates quicksilver.json file at current directory\n");
+                    Console.WriteLine("<dir_path> - directory path where quicksilver.json file is located\n");
+                    throw new InteruptedException("");
+                case "init":
+                    var configuration = new Configuration();
+                    Console.WriteLine("Program to execute");
+                    configuration.Program = Console.ReadLine();
+                    configuration.DirectoryPath = currentDir;
+                    Console.WriteLine("Arguments");
+                    configuration.Arguments = Console.ReadLine();
+                    Console.WriteLine("Filters comma separated values");
+                    configuration.Filters = Console.ReadLine().Split(',');
+                    CreateConfigurationFile(configuration);
+                    throw new InteruptedException("");
+                default:
+                    if (Directory.Exists(args[0]))
+                        return reader.LoadConfiguration(args[0]);
+                    else
+                        throw new ArgumentException($"Directory: {args[0]} does not exits.");
+            }
         }
 
         private static void CreateConfigurationFile(Configuration configuration)
