@@ -32,7 +32,7 @@ namespace QuickSilverSpecyfication
             if (!Directory.Exists(_configuartion.DirectoryPath))
             {
                 Directory.CreateDirectory(_configuartion.DirectoryPath);
-                File.Create(Path.Combine(_configuartion.DirectoryPath, _configuartion.StartUpFilePath)).Close();
+                File.Create(Path.Combine(_configuartion.DirectoryPath, _configuartion.Arguments)).Close();
             }
         }
 

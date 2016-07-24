@@ -70,8 +70,8 @@ namespace Quicksilver
                         Console.WriteLine("Program to execute");
                         configuration.Program = Console.ReadLine();
                         configuration.DirectoryPath = currentDir;
-                        Console.WriteLine("Startup file path");
-                        configuration.StartUpFilePath = Console.ReadLine();
+                        Console.WriteLine("Arguments");
+                        configuration.Arguments = Console.ReadLine();
                         Console.WriteLine("Filters comma separated values");
                         configuration.Filters = Console.ReadLine().Split(',');
                         CreateConfigurationFile(configuration);

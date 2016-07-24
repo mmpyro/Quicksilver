@@ -9,6 +9,7 @@ using System.Text;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System;
+using System.ComponentModel;
 
 namespace Quicksilver.ProcessWorker
 {
@@ -71,23 +72,30 @@ namespace Quicksilver.ProcessWorker
 
         public void Start()
         {
-            if (_isRunning == false)
+            try
             {
-                _token = _cancelationToken.Token;
-                _process = CreateProcess();
-                _process.Start();
-                _logger.Warn($"Start process: {_configuration.Program} pid: {_process.Id}");
-                _soutReader = Task.Run(() =>
+                if (_isRunning == false)
                 {
-                    using (StreamReader sr = new StreamReader(_process.StandardOutput.BaseStream, Encoding.UTF8))
+                    _token = _cancelationToken.Token;
+                    _process = CreateProcess();
+                    _process.Start();
+                    _logger.Warn($"Start process: {_configuration.Program} pid: {_process.Id}");
+                    _soutReader = Task.Run(() =>
                     {
-                        while (!_cancelationToken.IsCancellationRequested && !sr.EndOfStream)
+                        using (StreamReader sr = new StreamReader(_process.StandardOutput.BaseStream, Encoding.UTF8))
                         {
-                            _logger.Debug(sr.ReadLine());
+                            while (!_cancelationToken.IsCancellationRequested && !sr.EndOfStream)
+                            {
+                                _logger.Debug(sr.ReadLine());
+                            }
                         }
-                    }
-                });
-                _isRunning = true;
+                    });
+                    _isRunning = true;
+                }
+            }
+            catch(Win32Exception ex)
+            {
+                throw new ArgumentException("Specify full path for program in quicksilver.json file.", ex);
             }
         }
 
@@ -97,7 +105,7 @@ namespace Quicksilver.ProcessWorker
             process.StartInfo = new ProcessStartInfo
             {
                 FileName = _configuration.Program,
-                Arguments= _configuration.StartUpFilePath,
+                Arguments= _configuration.Arguments,
                 WorkingDirectory = _configuration.DirectoryPath,
                 StandardOutputEncoding = Encoding.UTF8,
                 CreateNoWindow = true,

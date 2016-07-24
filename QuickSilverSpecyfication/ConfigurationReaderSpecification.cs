@@ -21,12 +21,12 @@ namespace QuickSilverSpecyfication
             {
                 DirectoryPath = path,
                 Filters = new string[] { "js", "html" },
-                StartUpFilePath = "app.js"
+                Arguments = "app.js"
             });
             //When
             Configuration configurartion =  reader.LoadConfiguration("path to json file");
             //Then
-            configurartion.StartUpFilePath.ShouldBe("app.js");
+            configurartion.Arguments.ShouldBe("app.js");
             configurartion.DirectoryPath.ShouldBe(path);
             configurartion.Filters.ShouldBe(new string[] { "js", "html"});
         }
@@ -41,7 +41,7 @@ namespace QuickSilverSpecyfication
             //When
             Configuration configuration = reader.LoadConfiguration(configFilePath);
             //Then
-            configuration.StartUpFilePath.ShouldBe("app.js");
+            configuration.Arguments.ShouldBe("app.js");
             configuration.DirectoryPath.ShouldBe(path);
             configuration.Filters.ShouldBe(new string[] { "js", "html"});
         }
