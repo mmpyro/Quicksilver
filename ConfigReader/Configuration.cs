@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using ConfigManager.Helpers;
 
 namespace ConfigManager
 {
@@ -16,14 +17,7 @@ namespace ConfigManager
             }
             set
             {
-                if (value.Contains("/"))
-                {
-                    _program = value.Replace("/", @"\");
-                }
-                else
-                {
-                    _program = value;
-                }
+                _program = value.ConvertPath();
             }
         }
 
@@ -36,14 +30,7 @@ namespace ConfigManager
 
             set
             {
-                if (value.Contains("/"))
-                {
-                    _directoryPath = value.Replace("/", @"\");
-                }
-                else
-                {
-                    _directoryPath = value;
-                }
+                _directoryPath = value.ConvertPath();
             }
         }
     }

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="Configuration.cs" />
     <Compile Include="ConfigWriter.cs" />
+    <Compile Include="Helpers\PathOsConverter.cs" />
     <Compile Include="IConfigurationReader.cs" />
     <Compile Include="JSONReader.cs" />
     <Compile Include="JSONWriter.cs" />
