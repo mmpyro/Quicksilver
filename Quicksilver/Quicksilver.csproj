@@ -82,17 +82,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\OldProjects\Codes\FileNotifier\FileNotifier\FileNotifier.csproj">
-      <Project>{dc041f0a-cd01-47b3-b511-8e979a581bdb}</Project>
-      <Name>FileNotifier</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\OldProjects\Codes\FileNotifier\FileWatcher\FileWatcher.csproj">
-      <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
-      <Name>FileWatcher</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ConfigReader\ConfigManager.csproj">
       <Project>{0021012e-70e3-42c3-a44f-5e61123d0275}</Project>
       <Name>ConfigManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileNotifier\FileNotifier.csproj">
+      <Project>{dc041f0a-cd01-47b3-b511-8e979a581bdb}</Project>
+      <Name>FileNotifier</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FileWatcher\FileWatcher.csproj">
+      <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
+      <Name>FileWatcher</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
