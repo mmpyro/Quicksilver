@@ -24,6 +24,11 @@ namespace Quicksilver.Logger
             WriteLine(message, ConsoleColor.DarkYellow);
         }
 
+        public void Log(string message)
+        {
+            WriteLine(message, ConsoleColor.Green);
+        }
+
         private void WriteLine(string message,ConsoleColor color)
         {
             Console.ForegroundColor = color;

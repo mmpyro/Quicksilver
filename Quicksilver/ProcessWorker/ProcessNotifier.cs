@@ -3,8 +3,6 @@ using ConfigManager;
 using System.Diagnostics;
 using Quicksilver.Filters;
 using Quicksilver.Logger;
-using System.Threading.Tasks;
-using System.Threading;
 using System.Text;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -20,9 +18,6 @@ namespace Quicksilver.ProcessWorker
         private readonly Configuration _configuration;
         private readonly ILogger _logger;
         private Process _process;
-        private Task _soutReader;
-        private CancellationTokenSource _cancelationToken = new CancellationTokenSource();
-        private CancellationToken _token;
         private bool _isRunning = false;
         private readonly Subject<string> _subject;
         private readonly IDisposable _subscryption;
@@ -42,10 +37,8 @@ namespace Quicksilver.ProcessWorker
             if (_isRunning == true)
             {
                 _logger.Warn($"Stop prcess with pid: {_process.Id}");
-                if(!_process.HasExited)
-                    _process.Kill();
-                _cancelationToken.Cancel();
-                _cancelationToken = new CancellationTokenSource();
+                if (!_process.HasExited)
+                    _process.Dispose();
                 _isRunning = false;
             }
         }
@@ -76,20 +69,10 @@ namespace Quicksilver.ProcessWorker
             {
                 if (_isRunning == false)
                 {
-                    _token = _cancelationToken.Token;
                     _process = CreateProcess();
                     _process.Start();
                     _logger.Warn($"Start process: {_configuration.Program} pid: {_process.Id}");
-                    _soutReader = Task.Run(() =>
-                    {
-                        using (StreamReader sr = new StreamReader(_process.StandardOutput.BaseStream, Encoding.UTF8))
-                        {
-                            while (!_cancelationToken.IsCancellationRequested && !sr.EndOfStream)
-                            {
-                                _logger.Debug(sr.ReadLine());
-                            }
-                        }
-                    });
+                    RedirectOutput();
                     _isRunning = true;
                 }
             }
@@ -97,6 +80,36 @@ namespace Quicksilver.ProcessWorker
             {
                 throw new ArgumentException("Specify full path for program in quicksilver.json file.", ex);
             }
+        }
+
+        private void RedirectOutput()
+        {
+            _process.BeginErrorReadLine();
+            _process.BeginOutputReadLine();
+            _process.ErrorDataReceived += (s, e) =>
+            {
+                DisplayOnOutput(e);
+            };
+            _process.OutputDataReceived += (s, e) =>
+            {
+                DisplayOnOutput(e);
+            };
+            _process.Exited += (s, e) =>
+            {
+                int exitCode = _process.ExitCode;
+                string message = $"Process exit code: {exitCode}";
+                if (exitCode == 0)
+                    _logger.Log(message);
+                else
+                    _logger.Error(message);
+            };
+        }
+
+        private void DisplayOnOutput(DataReceivedEventArgs e)
+        {
+            string data = e?.Data?.Trim();
+            if (!string.IsNullOrEmpty(data))
+                _logger.Debug(data);
         }
 
         private Process CreateProcess()
