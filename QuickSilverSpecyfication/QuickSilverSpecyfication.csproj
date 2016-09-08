@@ -64,7 +64,6 @@
     <Compile Include="FakeWatchDog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QucikSilverSpecyfication.cs" />
-    <Compile Include="QuickSilverAcceptanceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
