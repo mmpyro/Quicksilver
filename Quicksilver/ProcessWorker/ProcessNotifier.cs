@@ -38,7 +38,7 @@ namespace Quicksilver.ProcessWorker
             {
                 _logger.Warn($"Stop prcess with pid: {_process.Id}");
                 if (!_process.HasExited)
-                    _process.Dispose();
+                    _process.Kill();
                 _isRunning = false;
             }
         }
